@@ -33,14 +33,14 @@ var
    thehost : IPluginHost = nil;  // Reference to the host (which is Mini Calc)
 
 
-function TPlugSW.GetMyName : WideString;
+function TYourClass.GetMyName : WideString;
 (* Do NOT change. *)
 begin
    GetMyName := MYNAME;
 end;
 
 
-procedure TPlugSW.Execute;
+procedure TYourClass.Execute;
 (* Method called by Mini Calc to execute the plugin. *)
 begin
    // Your plugin code here.
@@ -53,7 +53,7 @@ function PluginInit(host : IPluginHost) : IPlugin; stdcall;
 (* Do NOT change. *)
 begin
    thehost := host;
-   PluginInit := TPlugSW.Create as IPlugin;
+   PluginInit := TYourClass.Create as IPlugin;
 end;
 
 
