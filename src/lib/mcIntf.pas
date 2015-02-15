@@ -1,5 +1,5 @@
 (* === mcIntf ===
- * Ver: 1.0.0
+ * Ver: 1.0.1
  *  By: Igor Nunes
  * Extension/plugin interfaces for Mini Calc. *)
 
@@ -45,6 +45,8 @@ type
       procedure SetStringVariable(id : WideString; v : WideString);
       
       (* List Manager *)
+      function ListExists(const ID : WideString) : boolean;
+      
       function CreateList(id : WideString) : boolean;
       procedure DeleteList(id : WideString);
       procedure DeleteList(i : word); overload;
@@ -56,23 +58,16 @@ type
       function DeleteFromList(id : WideString; ind : word) : boolean;
       function DeleteFromList(i : LongInt; ind : word) : boolean; overload;
       
-      function GetListCount : word;
-      property NumberOfLists : word read GetListCount;
+      function ListByIndexCount : word;
+      property NumberOfLists : word read ListByIndexCount;
       
-      function GetListStr(const ID : WideString) : TList;
-      property ListByName  [s : WideString] : TList read GetListStr;
-      
-      function GetList(const I : word) : TList;
-      property ListByIndex [i : word]       : TList read GetList;
-      
+      function ListByName(const ID : WideString) : TList;
+      function ListByIndex(const I : word) : TList;
       function GetListElement(const ID : WideString; const I : LongInt) : Double;
       procedure SetListElement(const ID : WideString; const I : LongInt; thevalue : Double);
-      property ListElement[s : WideString; i : LongInt] : Double read GetListElement write SetListElement;
       
-      function GetListElemCountStr(const ID : WideString) : word;
-      function GetListElemCount(const I : word) : word;
-      property NumberOfElementsByName  [s : WideString] : word read GetListElemCountStr;
-      property NumberOfElementsByIndex [i : word]   : word read GetListElemCount;
+      function NumberOfElementsByName(const ID : WideString) : word;
+      function NumberOfElementsByIndex(const I : word) : word;
       
       (* Function manager *)
       procedure SetFunction(i : word; fn : WideString);
@@ -85,15 +80,19 @@ type
       procedure SetPlotterZoom(zoom : TZoom);
       function GetPlotterZoom : TZoom;
       property PlotterZoom : TZoom read GetPlotterZoom write SetPlotterZoom;
-      
-      (* Anything else? *)
-      // Not yet...
    end;
    
    IPlugin = interface ['{C9EEF4FC-1CF2-4350-9172-9428F3701E22}']
       function GetMyName : WideString;                  // Private
       property PluginName : WideString read GetMyName;  // Public or Published - Mini Calc uses this to load the Plugin Menu.
       procedure Execute;  // Public or Published - it's the method with which the plugin is called from Mini Calc.
+      
+      (* Plugin will have the name "mcp*.dll"                           *
+       *    E.g.: "mcpStopwatch.dll"                                    *
+       *                                                                *
+       * It must export only one function:                              *
+       *    function PluginInit(host : IPluginHost) : IPlugin; stdcall; *
+       * Without this function, the plugin is NOT recognised.           *)
    end;
 
 
